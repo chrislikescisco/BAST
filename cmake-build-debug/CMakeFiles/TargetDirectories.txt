@@ -1,0 +1,3 @@
+C:/Users/thatp/CLionProjects/BAST/cmake-build-debug/CMakeFiles/BAST.dir
+C:/Users/thatp/CLionProjects/BAST/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/thatp/CLionProjects/BAST/cmake-build-debug/CMakeFiles/rebuild_cache.dir
