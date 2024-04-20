@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -22,44 +23,54 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         string first_name;
         string last_name;
         string position;
-        char bats;
-        char throws;
+        string bats;
+        string throws;
         Player();
-        int games;
-        // Hitting stats:
-        int at_bats;
-        int runs;
-        int hits;
-        int doubles;
-        int triples;
-        int home_runs;
-        int rbi;
-        int stolen_bases;
-        int caught_stealing;
-        int batted_balls;
-        int strikeouts;
-        int intentional_walks;
-        int hit_by_pitch;
-        int sac_bunts;
-        int sac_flies;
-        int groundouts;
-        double batting_avg; // not included in dataset but can be calculated
-        
+        Player(string player_id_, string first_name_, string last_name_, string bats_, string throws_);
+        struct Stats {
+            int games;
+            // Hitting stats:
+            int at_bats;
+            int runs;
+            int hits;
+            int doubles;
+            int triples;
+            int home_runs;
+            int rbi;
+            int stolen_bases;
+            int caught_stealing;
+            int walks;
+            int strikeouts;
+            int intentional_walks;
+            int hit_by_pitch;
+            int sac_bunts;
+            int sac_flies;
+            int groundouts;
+            double batting_avg; // not included in dataset but can be calculated
+            double slugging;
+            double obp;
+            double ops;
 
-        // Fielding stats:
-         // Moved to main player class because all players have these
-        int games_started;
-        int inning_outs;
-        int putouts;
-        int assists;
-        int errors;
-        int double_plays;
-        int passed_balls;
-        int stolen_bases_allowed;
-        int caught_stealing_inf;
-        int zone_rating;
+            // Fielding stats:
+            // Moved to main player class because all players have these
+            int games_started;
+            int inning_outs;
+            int putouts;
+            int assists;
+            int errors;
+            int double_plays;
+            int passed_balls;
+            int stolen_bases_allowed;
+            int caught_stealing_inf;
+            int zone_rating;
+            Stats();
+            void print();
+        };
+        map<int, Stats> seasons;
+        void print(int year);
     };
     class Pitcher : public Player { // yeah, we're using inheritance. so sorry :(
+        Pitcher();
         int wins;
         int losses;
         int games;
@@ -88,9 +99,15 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         // also factors into it so i chose not to include it.
     };
 
+    class DefaultLT{
+        bool operator()(Player player1, Player player2);
+    };
+public:
     Basedball();
     // we will include all players in a container of some kind, either an array
     // or a set. the array would allow us to sort in-place with heapsort but we
     // would have to iterate through it to search for playerIDs when adding stats
     // from different CSVs (mainly an issue with pitching).
+    vector<Player> player_vect; // This is a temporary structure for debugging purposes
+    void read();
 };

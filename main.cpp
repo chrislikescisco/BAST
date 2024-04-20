@@ -1,6 +1,7 @@
 #include <iostream>
+#include "basedball.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+    Basedball based;
+    based.read();
 }
