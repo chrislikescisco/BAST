@@ -109,7 +109,7 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
     // map which contains combined career stats, as well as a year 1 which contains career averages.)
     class ComparePlayers {
     public:
-        virtual bool operator()(const Player& a, const int& yr1, const Player& b, const int& yr2) const = 0;
+        virtual bool operator()(const Player &a, const int &yr1, const Player &b, const int& yr2) const = 0;
     };
     class CompareByBattingAvg : public ComparePlayers {
     public:
