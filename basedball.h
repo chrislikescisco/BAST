@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <map>
 #include <algorithm>
 #include <cmath>
@@ -64,41 +65,48 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
             int caught_stealing_inf;
             int zone_rating;
             Stats();
+
+            // Pitching stats (map will be empty for non-pitchers so we don't have 20 unused int values attached to 90%
+            // of the player objects
+            void print();
+        };
+        struct PStats {
+            int complete_games;
+            int shutouts;
+            int saves;
+            int ip_outs;
+            int hits_allowed;
+            int hr_allowed;
+            int so_issued;
+            int bb_allowed;
+            int ba_opp;
+            double era;
+            int iw_issued;
+            int wild_pitches;
+            int hbp_issued;
+            int balks;
+            int batters_facing_pitcher;
+            int games_finished;
+            int runs_given;
+            int sh_issued;
+            int sf_issued;
+            PStats();
+
             void print();
         };
         map<int, Stats> seasons;
+        map<int, PStats> pitching_seasons;
         Stats stats;
         void print(int year);
     };
-    class Pitcher : public Player { // yeah, we're using inheritance. so sorry :(
-        Pitcher();
-        int wins;
-        int losses;
-        int games;
-        int games_started;
-        int complete_games;
-        int shutouts;
-        int saves;
-        int ip_outs;
-        int hits_allowed;
-        int hr_allowed;
-        int so_issued;
-        int bb_allowed;
-        int ba_opp;
-        double era;
-        int iw_issued;
-        int wild_pitches;
-        int hbp_issued;
-        int balks;
-        int batters_facing_pitcher;
-        int games_finished;
-        int runs_given;
-        int sh_issued;
-        int sf_issued;
+//        int wins;
+//        int losses;
+//        int games;
+//        int games_started;
+
         // there's one more stat for pitchers: GIDP, but this has a super low
         // sample size and is honestly not even specific to pitchers, fielding
         // also factors into it so i chose not to include it.
-    };
     class ComparePlayers {
     public:
         virtual bool operator()(const Player& a, const Player& b) const = 0;

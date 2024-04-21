@@ -68,32 +68,6 @@ void Basedball::Player::Stats::print() {
     << endl << "Zone Rating: " << zone_rating << endl << endl;
 }
 
-Basedball::Pitcher::Pitcher() {
-    wins = 0;
-    losses = 0;
-    games = 0;
-    games_started = 0;
-    complete_games = 0;
-    shutouts = 0;
-    saves = 0;
-    ip_outs = 0;
-    hits_allowed = 0;
-    hr_allowed = 0;
-    so_issued = 0;
-    bb_allowed = 0;
-    ba_opp = 0;
-    era = 0;
-    iw_issued = 0;
-    wild_pitches = 0;
-    hbp_issued = 0;
-    balks = 0;
-    batters_facing_pitcher = 0;
-    games_finished = 0;
-    runs_given = 0;
-    sh_issued = 0;
-    sf_issued = 0;
-}
-
 bool Basedball::DefaultLT::operator()(Basedball::Player player1, Basedball::Player player2) {
     if (player1.player_id < player2.player_id)
         return true;
@@ -352,6 +326,167 @@ void Basedball::read() {
             stats.obp = obp;
             stats.ops = ops;
             player_vect[idx].seasons.emplace(stoi(year), stats);
+        }
+        player_vect[idx].print(stoi(year));
+    }
+
+    file.close();
+    file.clear();
+    file.open("pitching.csv");
+    file.ignore(118);
+
+    while(getline(file, line_str)) {
+        stringstream line(line_str);
+        string player_id;
+        getline(line, player_id, ',');
+        int first = 0;
+        int last = player_vect.size();
+        int middle = player_vect.size() / 2;
+        int idx;
+        while (player_vect[middle].player_id != player_id) { // Binary search to find player in the vector
+            if (first > last) {
+                idx = -1;
+                break;
+            } else if (player_vect[middle].player_id < player_id) {
+                first = middle + 1;
+                middle = (last + first) / 2;
+                idx = middle;
+            } else {
+                last = middle - 1;
+                middle = (last + first) / 2;
+                idx = middle;
+            }
+        }
+        string year;
+        getline(line, year, ',');
+        for (int i = 0; i < 4; i++)
+            line.ignore(100, ',');
+        string complete_games;
+        getline(line, complete_games, ',');
+        if (complete_games == "")
+            complete_games = "0";
+        string shutouts;
+        getline(line, shutouts, ',');
+        if (shutouts == "")
+            shutouts = "0";
+        string saves;
+        getline(line, saves, ',');
+        if (saves == "")
+            saves = "0";
+        string ip_outs;
+        getline(line, ip_outs, ',');
+        if (ip_outs == "")
+            ip_outs = "0";
+        string hits_allowed;
+        getline(line, hits_allowed, ',');
+        if (hits_allowed == "")
+            hits_allowed = "0";
+        string hr_allowed;
+        getline(line, hr_allowed, ',');
+        if (hr_allowed == "")
+            hr_allowed = "0";
+        string so_issued;
+        getline(line, so_issued, ',');
+        if (so_issued == "")
+            so_issued = "0";
+        string bb_allowed;
+        getline(line, bb_allowed, ',');
+        if (bb_allowed == "")
+            bb_allowed = "0";
+        string ba_opp;
+        getline(line, ba_opp, ',');
+        if (ba_opp == "")
+            ba_opp = "0";
+        string era;
+        getline(line, era, ',');
+        if (era == "")
+            era = "0";
+        string iw_issued;
+        getline(line, iw_issued, ',');
+        if (iw_issued == "")
+            iw_issued = "0";
+        string wild_pitches;
+        getline(line, wild_pitches, ',');
+        if (wild_pitches == "")
+            wild_pitches = "0";
+        string hbp_issued;
+        getline(line, hbp_issued, ',');
+        if (hbp_issued == "")
+            hbp_issued = "0";
+        string balks;
+        getline(line, balks, ',');
+        if (balks == "")
+            balks = "0";
+        string batters_facing_pitcher;
+        getline(line, batters_facing_pitcher, ',');
+        if (batters_facing_pitcher == "")
+            batters_facing_pitcher = "0";
+        string games_finished;
+        getline(line, games_finished, ',');
+        if (games_finished == "")
+            games_finished = "0";
+        string runs_given;
+        getline(line, runs_given, ',');
+        if (runs_given == "")
+            runs_given = "0";
+        string sh_issued;
+        getline(line, sh_issued, ',');
+        if (sh_issued == "")
+            sh_issued = "0";
+        string sf_issued;
+        getline(line, sf_issued, ',');
+        if (sf_issued == "")
+            sf_issued = "0";
+        auto yr = player_vect[idx].pitching_seasons.find(stoi(year));
+        if (yr != player_vect[idx].pitching_seasons.end()) {
+            yr->second.complete_games = stoi(complete_games);
+            yr->second.shutouts = stoi(shutouts);
+            yr->second.saves = stoi(saves);
+            yr->second.ip_outs = stoi(ip_outs);
+            yr->second.hits_allowed = stoi(hits_allowed);
+            yr->second.hr_allowed = stoi(hr_allowed);
+            yr->second.so_issued = stoi(so_issued);
+            yr->second.bb_allowed = stoi(bb_allowed);
+            yr->second.ba_opp = stoi(ba_opp);
+            yr->second.so_issued = stoi(so_issued);
+            yr->second.bb_allowed = stoi(bb_allowed);
+            yr->second.ba_opp = stoi(ba_opp);
+            yr->second.era = stod(era);
+            yr->second.iw_issued = stoi(iw_issued);
+            yr->second.wild_pitches = stoi(wild_pitches);
+            yr->second.hbp_issued = stoi(hbp_issued);
+            yr->second.balks = stoi(balks);
+            yr->second.batters_facing_pitcher = stoi(batters_facing_pitcher);
+            yr->second.games_finished = stoi(games_finished);
+            yr->second.runs_given = stoi(runs_given);
+            yr->second.sh_issued = stoi(sh_issued);
+            yr->second.sf_issued = stoi(sf_issued);
+        }
+        else {
+            Player::PStats pstats;
+            pstats.complete_games = stoi(complete_games);
+            pstats.shutouts = stoi(shutouts);
+            pstats.saves = stoi(saves);
+            pstats.ip_outs = stoi(ip_outs);
+            pstats.hits_allowed = stoi(hits_allowed);
+            pstats.hr_allowed = stoi(hr_allowed);
+            pstats.so_issued = stoi(so_issued);
+            pstats.bb_allowed = stoi(bb_allowed);
+            pstats.ba_opp = stoi(ba_opp);
+            pstats.so_issued = stoi(so_issued);
+            pstats.bb_allowed = stoi(bb_allowed);
+            pstats.ba_opp = stoi(ba_opp);
+            pstats.era = stod(era);
+            pstats.iw_issued = stoi(iw_issued);
+            pstats.wild_pitches = stoi(wild_pitches);
+            pstats.hbp_issued = stoi(hbp_issued);
+            pstats.balks = stoi(balks);
+            pstats.batters_facing_pitcher = stoi(batters_facing_pitcher);
+            pstats.games_finished = stoi(games_finished);
+            pstats.runs_given = stoi(runs_given);
+            pstats.sh_issued = stoi(sh_issued);
+            pstats.sf_issued = stoi(sf_issued);
+            player_vect[idx].pitching_seasons.emplace(stoi(year), pstats);
         }
         player_vect[idx].print(stoi(year));
     }
