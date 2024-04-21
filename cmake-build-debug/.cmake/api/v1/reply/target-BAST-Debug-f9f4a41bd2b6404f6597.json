@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "BAST.exe"
-		},
-		{
-			"path" : "BAST.pdb"
+			"path" : "BAST"
 		}
 	],
 	"backtrace" : 1,
@@ -38,7 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++1z -fdiagnostics-color=always"
+					"fragment" : "-g -std=gnu++20 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.6 -fcolor-diagnostics"
 				}
 			],
 			"language" : "CXX",
@@ -69,16 +66,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "BAST",
-	"nameOnDisk" : "BAST.exe",
+	"nameOnDisk" : "BAST",
 	"paths" : 
 	{
 		"build" : ".",
