@@ -266,20 +266,49 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         MaxHeap(const ComparePlayers& comp) : comparator(&comp) {}
         void addPlayer(Player value) {
             data.push_back(value);
-            push_heap(data.begin(), data.end(), [this](const Player& a, const Player& b) {
-                return (*comparator)(a, b);
-            });
+            int i = data.size() - 1;
+            while (i != 0) {
+                int parent = (i - 1) / 2;
+                if (!(*comparator)(data[parent], data[i])) {
+                    swap(data[i], data[parent]);
+                    i = parent;
+                } else {
+                    break;
+                }
+            }
         }
         Player extractMax() {
-            pop_heap(data.begin(), data.end(), [this](const Player& a, const Player& b) {
-                return (*comparator)(a, b);
-            });
+            if (data.empty()) {
+                cout << "No players to show yet";
+            }
+            swap(data[0], data.back());
             Player max = data.back();
             data.pop_back();
+            if (!data.empty()) {
+                heapifyDown(0);
+            }
             return max;
         }
         bool isEmpty() const {
             return data.empty();
+        }
+        void heapifyDown(int idx) {
+            int size = data.size();
+            int largest = idx;
+            int left = 2 * idx + 1;
+            int right = 2 * idx + 2;
+
+            if (left < size && (*comparator)(data[left], data[largest])) {
+                largest = left;
+            }
+            if (right < size && (*comparator)(data[right], data[largest])) {
+                largest = right;
+            }
+
+            if (largest != idx) {
+                swap(data[idx], data[largest]);
+                heapifyDown(largest);
+            }
         }
     };
 
