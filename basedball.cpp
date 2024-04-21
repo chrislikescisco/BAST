@@ -68,7 +68,7 @@ void Basedball::Player::Stats::print() {
     << endl << "Zone Rating: " << zone_rating << endl << endl;
 }
 
-bool DefaultLT::operator()(Basedball::Player player1, Basedball::Player player2) {
+bool Basedball::DefaultLT::operator()(Basedball::Player player1, Basedball::Player player2) {
     if (player1.player_id < player2.player_id)
         return true;
     else if (player1.player_id != player2.player_id)
@@ -486,7 +486,7 @@ void Basedball::read() {
             pstats.runs_given = stoi(runs_given);
             pstats.sh_issued = stoi(sh_issued);
             pstats.sf_issued = stoi(sf_issued);
-            player_vect[idx].pitcher_stats.emplace(stoi(year), pstats);
+            player_vect[idx].pitching_seasons.emplace(stoi(year), pstats);
         }
         player_vect[idx].print(stoi(year));
     }
