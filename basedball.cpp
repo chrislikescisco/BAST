@@ -47,12 +47,35 @@ Basedball::Player::Stats::Stats() {
     zone_rating = 0;
 }
 
+Basedball::Player::PStats::PStats() {
+    complete_games = 0;
+    shutouts = 0;
+    saves = 0;
+    ip_outs = 0;
+    hits_allowed = 0;
+    hr_allowed = 0;
+    so_issued = 0;
+    bb_allowed = 0;
+    ba_opp = 0;
+    era = 0;
+    iw_issued = 0;
+    wild_pitches = 0;
+    hbp_issued = 0;
+    balks = 0;
+    batters_facing_pitcher = 0;
+    games_finished = 0;
+    runs_given = 0;
+    sh_issued = 0;
+    sf_issued = 0;
+}
+
 void Basedball::Player::print(int year) {
     cout << year << ": " << endl;
     cout << "Player ID: " << player_id << endl << "Name: " << first_name << ' ' << last_name << endl <<"Bats: " << bats
     << endl << "Throws: " << throws << endl;
     seasons[year].print();
 }
+
 
 void Basedball::Player::Stats::print() {
     cout << fixed << setprecision(3) <<"At bats: " << at_bats << endl << "Runs: " << runs << endl << "Hits: " << hits <<
