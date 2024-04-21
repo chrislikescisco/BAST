@@ -91,6 +91,7 @@ void Basedball::Player::Stats::print() {
     << endl << "Zone Rating: " << zone_rating << endl << endl;
 }
 
+
 bool Basedball::DefaultLT::operator()(Basedball::Player player1, Basedball::Player player2) {
     if (player1.player_id < player2.player_id)
         return true;
