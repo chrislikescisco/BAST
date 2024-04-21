@@ -97,6 +97,7 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         map<int, Stats> seasons;
         map<int, PStats> pitching_seasons;
         Stats stats;
+        PStats p;
         void print(int year);
     };
 //        int wins;
@@ -264,6 +265,101 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
     class ComparedZoneRating : public ComparePlayers {
         bool operator()(const Player& a, const Player& b) const override {
             a.stats.zone_rating > b.stats.zone_rating;
+        }
+    };
+    class ComparedCompleteGames : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.complete_games > b.p.complete_games;
+        }
+    };
+    class ComparedShutouts : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.shutouts > b.p.shutouts;
+        }
+    };
+    class ComparedSaved : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.saves > b.p.saves;
+        }
+    };
+    class ComparedIp : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.ip_outs > b.p.ip_outs;
+        }
+    };
+    class ComparedHitsAll : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.hits_allowed > b.p.hits_allowed;
+        }
+    };
+    class ComparedHrAll : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.hr_allowed > b.p.hr_allowed;
+        }
+    };
+    class ComparedSoIssued : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.so_issued > b.p.so_issued;
+        }
+    };
+    class ComparedBbAll : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.bb_allowed > b.p.bb_allowed;
+        }
+    };
+    class ComparedBaOpp : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.ba_opp > b.p.ba_opp;
+        }
+    };
+    class CompareEra : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.era > b.p.era;
+        }
+    };
+    class CompareIwIssued : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.iw_issued > b.p.iw_issued;
+        }
+    };
+    class CompareWildPitches : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.wild_pitches > b.p.wild_pitches;
+        }
+    };
+    class CompareHbpIssued : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.hbp_issued > b.p.hbp_issued;
+        }
+    };
+    class CompareBalks : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.balks > b.p.balks;
+        }
+    };
+    class CompareBattersvPitcher : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.batters_facing_pitcher > b.p.batters_facing_pitcher;
+        }
+    };
+    class CompareGamesFinished : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.games_finished > b.p.games_finished;
+        }
+    };
+    class CompareRunsGiven : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.runs_given > b.p.runs_given;
+        }
+    };
+    class CompareShIssued : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.sh_issued > b.p.sh_issued;
+        }
+    };
+    class CompareSfIssued : public ComparePlayers {
+        bool operator()(const Player& a, const Player& b) const override {
+            a.p.sf_issued > b.p.sf_issued;
         }
     };
     class MaxHeap {
