@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <unordered_map>
 #include <map>
 #include <algorithm>
@@ -71,6 +72,8 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
             void print();
         };
         struct PStats {
+            int wins;
+            int losses;
             int complete_games;
             int shutouts;
             int saves;
@@ -96,8 +99,9 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         };
         map<int, Stats> seasons;
         map<int, PStats> pitching_seasons;
-        void print(int year);
+        void print();
     };
+    static unordered_set<string> pitchers;
 //        int wins;
 //        int losses;
 //        int games;
@@ -266,154 +270,154 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
             a.seasons.at(yr1).zone_rating > b.seasons.at(yr2).zone_rating;
         }
     };
-    class ComparedCompleteGames : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.complete_games > b.p.complete_games;
-        }
-    };
-    class ComparedShutouts : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.shutouts > b.p.shutouts;
-        }
-    };
-    class ComparedSaved : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.saves > b.p.saves;
-        }
-    };
-    class ComparedIp : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.ip_outs > b.p.ip_outs;
-        }
-    };
-    class ComparedHitsAll : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.hits_allowed > b.p.hits_allowed;
-        }
-    };
-    class ComparedHrAll : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.hr_allowed > b.p.hr_allowed;
-        }
-    };
-    class ComparedSoIssued : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.so_issued > b.p.so_issued;
-        }
-    };
-    class ComparedBbAll : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.bb_allowed > b.p.bb_allowed;
-        }
-    };
-    class ComparedBaOpp : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.ba_opp > b.p.ba_opp;
-        }
-    };
-    class CompareEra : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.era > b.p.era;
-        }
-    };
-    class CompareIwIssued : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.iw_issued > b.p.iw_issued;
-        }
-    };
-    class CompareWildPitches : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.wild_pitches > b.p.wild_pitches;
-        }
-    };
-    class CompareHbpIssued : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.hbp_issued > b.p.hbp_issued;
-        }
-    };
-    class CompareBalks : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.balks > b.p.balks;
-        }
-    };
-    class CompareBattersvPitcher : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.batters_facing_pitcher > b.p.batters_facing_pitcher;
-        }
-    };
-    class CompareGamesFinished : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.games_finished > b.p.games_finished;
-        }
-    };
-    class CompareRunsGiven : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.runs_given > b.p.runs_given;
-        }
-    };
-    class CompareShIssued : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.sh_issued > b.p.sh_issued;
-        }
-    };
-    class CompareSfIssued : public ComparePlayers {
-        bool operator()(const Player& a, const Player& b) const override {
-            a.p.sf_issued > b.p.sf_issued;
-        }
-    };
-    class MaxHeap {
-    private:
-        vector<Player> data;
-        const ComparePlayers* comparator; // points to comparator object
-    public:
-        MaxHeap(const ComparePlayers& comp) : comparator(&comp) {}
-        void addPlayer(Player value) {
-            data.push_back(value);
-            int i = data.size() - 1;
-            while (i != 0) {
-                int parent = (i - 1) / 2;
-                if (!(*comparator)(data[parent], data[i])) {
-                    swap(data[i], data[parent]);
-                    i = parent;
-                } else {
-                    break;
-                }
-            }
-        }
-        Player extractMax() {
-            if (data.empty()) {
-                cout << "No players to show yet";
-            }
-            swap(data[0], data.back());
-            Player max = data.back();
-            data.pop_back();
-            if (!data.empty()) {
-                heapifyDown(0);
-            }
-            return max;
-        }
-        bool isEmpty() const {
-            return data.empty();
-        }
-        void heapifyDown(int idx) {
-            int size = data.size();
-            int largest = idx;
-            int left = 2 * idx + 1;
-            int right = 2 * idx + 2;
-
-            if (left < size && (*comparator)(data[left], data[largest])) {
-                largest = left;
-            }
-            if (right < size && (*comparator)(data[right], data[largest])) {
-                largest = right;
-            }
-
-            if (largest != idx) {
-                swap(data[idx], data[largest]);
-                heapifyDown(largest);
-            }
-        }
-    };
+//    class ComparedCompleteGames : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.complete_games > b.p.complete_games;
+//        }
+//    };
+//    class ComparedShutouts : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.shutouts > b.p.shutouts;
+//        }
+//    };
+//    class ComparedSaved : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.saves > b.p.saves;
+//        }
+//    };
+//    class ComparedIp : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.ip_outs > b.p.ip_outs;
+//        }
+//    };
+//    class ComparedHitsAll : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.hits_allowed > b.p.hits_allowed;
+//        }
+//    };
+//    class ComparedHrAll : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.hr_allowed > b.p.hr_allowed;
+//        }
+//    };
+//    class ComparedSoIssued : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.so_issued > b.p.so_issued;
+//        }
+//    };
+//    class ComparedBbAll : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.bb_allowed > b.p.bb_allowed;
+//        }
+//    };
+//    class ComparedBaOpp : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.ba_opp > b.p.ba_opp;
+//        }
+//    };
+//    class CompareEra : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.era > b.p.era;
+//        }
+//    };
+//    class CompareIwIssued : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.iw_issued > b.p.iw_issued;
+//        }
+//    };
+//    class CompareWildPitches : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.wild_pitches > b.p.wild_pitches;
+//        }
+//    };
+//    class CompareHbpIssued : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.hbp_issued > b.p.hbp_issued;
+//        }
+//    };
+//    class CompareBalks : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.balks > b.p.balks;
+//        }
+//    };
+//    class CompareBattersvPitcher : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.batters_facing_pitcher > b.p.batters_facing_pitcher;
+//        }
+//    };
+//    class CompareGamesFinished : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.games_finished > b.p.games_finished;
+//        }
+//    };
+//    class CompareRunsGiven : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.runs_given > b.p.runs_given;
+//        }
+//    };
+//    class CompareShIssued : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.sh_issued > b.p.sh_issued;
+//        }
+//    };
+//    class CompareSfIssued : public ComparePlayers {
+//        bool operator()(const Player& a, const Player& b) const override {
+//            a.p.sf_issued > b.p.sf_issued;
+//        }
+//    };
+//    class MaxHeap {
+//    private:
+//        vector<Player> data;
+//        const ComparePlayers* comparator; // points to comparator object
+//    public:
+//        MaxHeap(const ComparePlayers& comp) : comparator(&comp) {}
+//        void addPlayer(Player value) {
+//            data.push_back(value);
+//            int i = data.size() - 1;
+//            while (i != 0) {
+//                int parent = (i - 1) / 2;
+//                if (!(*comparator)(data[parent], data[i])) {
+//                    swap(data[i], data[parent]);
+//                    i = parent;
+//                } else {
+//                    break;
+//                }
+//            }
+//        }
+//        Player extractMax() {
+//            if (data.empty()) {
+//                cout << "No players to show yet";
+//            }
+//            swap(data[0], data.back());
+//            Player max = data.back();
+//            data.pop_back();
+//            if (!data.empty()) {
+//                heapifyDown(0);
+//            }
+//            return max;
+//        }
+//        bool isEmpty() const {
+//            return data.empty();
+//        }
+//        void heapifyDown(int idx) {
+//            int size = data.size();
+//            int largest = idx;
+//            int left = 2 * idx + 1;
+//            int right = 2 * idx + 2;
+//
+//            if (left < size && (*comparator)(data[left], data[largest])) {
+//                largest = left;
+//            }
+//            if (right < size && (*comparator)(data[right], data[largest])) {
+//                largest = right;
+//            }
+//
+//            if (largest != idx) {
+//                swap(data[idx], data[largest]);
+//                heapifyDown(largest);
+//            }
+//        }
+//    };
 
     class DefaultLT{
         bool operator()(Player player1, Player player2);

@@ -69,11 +69,20 @@ Basedball::Player::PStats::PStats() {
     sf_issued = 0;
 }
 
-void Basedball::Player::print(int year) {
-    cout << year << ": " << endl;
+unordered_set<string> Basedball::pitchers;
+
+void Basedball::Player::print() {
     cout << "Player ID: " << player_id << endl << "Name: " << first_name << ' ' << last_name << endl <<"Bats: " << bats
     << endl << "Throws: " << throws << endl;
-    seasons[year].print();
+    for (auto iter = seasons.begin(); iter != seasons.end(); iter++) {
+        cout << iter->first << ": " << endl;
+        iter->second.print();
+        if (pitchers.find(player_id) != pitchers.end()) {
+            cout << iter->first << endl;
+            pitching_seasons[iter->first].print();
+        }
+    }
+
 }
 
 
@@ -89,6 +98,18 @@ void Basedball::Player::Stats::print() {
     << endl << "Double Plays: " << double_plays << endl << "Passed Balls: " << passed_balls << endl <<
     "Stolen Bases Allowed: " << stolen_bases_allowed << endl << "Caught Stealing (Infielder): " << caught_stealing_inf
     << endl << "Zone Rating: " << zone_rating << endl << endl;
+}
+
+void Basedball::Player::PStats::print() {
+    cout << fixed << setprecision(3) << "Wins: " << wins << endl << "Losses: " << losses << endl << "Complete Games: "
+    << complete_games << endl << "Shutouts: " << shutouts << endl << "Saves: " << saves << endl <<
+    "Innings Pitched (outs): " << ip_outs << endl << "Hits Allowed: " << hits_allowed << endl << "Home Runs (issued): "
+    << hr_allowed << endl << "Strikeouts (issued): " << so_issued << endl << "Walks (issued): " << bb_allowed << endl <<
+    "Batting Average (Opponents): " << ba_opp << endl << "ERA: " << era << endl << "Intentional Walks (issued): :" <<
+    iw_issued << endl << "Wild Pitches: " << wild_pitches << endl << "HBP (issued): " << hbp_issued << endl << "Balks: "
+    << balks << endl << "Batters Facing Pitcher: " << batters_facing_pitcher << "Games Finished: " << games_finished <<
+    endl << "Runs (issued): " << runs_given << endl << "Sacrifice Bunts (issued): " << sh_issued << endl <<
+    "Sacrifice Flys (issued): " << sf_issued << endl;
 }
 
 bool Basedball::DefaultLT::operator()(Basedball::Player player1, Basedball::Player player2) {
@@ -112,16 +133,13 @@ Basedball::Basedball() = default;
 
 void Basedball::read() {
     ifstream file;
-    file.open("master.csv");
-    file.ignore(224);
+    file.open("People.csv");
+    file.ignore(40);
     string line_str;
     while(getline(file, line_str)) {
         stringstream line(line_str);
         string player_id;
         getline(line, player_id, ',');
-
-        for (int i = 0; i < 12; i++)
-            line.ignore(100, ',');
 
         string first_name;
         getline(line, first_name, ',');
@@ -129,13 +147,11 @@ void Basedball::read() {
         string last_name;
         getline(line, last_name, ',');
 
-        for (int i = 0; i < 3; i++)
-            line.ignore(100, ',');
         string bats;
         getline(line, bats, ',');
 
         string throws;
-        getline(line, throws, ',');
+        getline(line, throws);
         Player new_player(player_id, first_name, last_name, bats, throws);
         player_vect.push_back(new_player);
     }
@@ -144,18 +160,19 @@ void Basedball::read() {
 //        cout << player_vect[i].player_id << " " << player_vect[i].first_name << " " << player_vect[i].last_name << " " <<player_vect[i].bats << " " << player_vect[i].throws << endl;
     file.close();
     file.clear();
-    file.open("fielding.csv");
-    file.ignore(76);
+    file.open("Fielding.csv");
+    file.ignore(67);
     while(getline(file, line_str)) {
         stringstream line(line_str);
         string player_id;
         getline(line, player_id, ',');
-//        cout << player_id << endl;
         int first = 0;
         int last = player_vect.size();
         int middle = player_vect.size() / 2;
+
         int idx;
         while (player_vect[middle].player_id != player_id) { // Binary search to find player in the vector
+//            cout << "first: " << first << " middle: " << middle << " last: " << last << " ID: " << player_vect[middle].player_id << endl;
             if (first > last) {
                 idx = -1;
                 break;
@@ -169,15 +186,16 @@ void Basedball::read() {
                 idx = middle;
             }
         }
-//        cout << player_vect[idx].player_id << endl;
         string year;
         getline(line, year, ',');
-        for (int i = 0; i < 3; i++)
-            line.ignore(100, ',');
+        string team_id;
+        getline(line, team_id, ',');
+        string lg_id;
+        getline(line, lg_id, ',');
         string position;
         getline(line, position, ',');
-        Player::Stats stats;
         player_vect[idx].position = position;
+        Player::Stats stats;
         string games;
         getline(line, games, ',');
         stats.games = stoi(games);
@@ -209,14 +227,26 @@ void Basedball::read() {
         getline(line, passed_balls, ',');
         if (passed_balls != "")
             stats.passed_balls = stoi(passed_balls);
+        string stolen_bases_allowed;
+        getline(line, stolen_bases_allowed, ',');
+        if (stolen_bases_allowed != "")
+            stats.stolen_bases_allowed = stoi(stolen_bases_allowed);
+        string caught_stealing_inf;
+        getline(line, caught_stealing_inf, ',');
+        if (caught_stealing_inf != "")
+            stats.caught_stealing_inf = stoi(caught_stealing_inf);
+        string zone_rating;
+        getline(line, zone_rating);
+        if (zone_rating != "")
+            stats.zone_rating = stoi(zone_rating);
         player_vect[idx].seasons.emplace(stoi(year), stats);
 //        player_vect[idx].print(stoi(year));
     }
     file.close();
     file.clear();
 
-    file.open("batting.csv");
-    file.ignore(87);
+    file.open("Batting.csv");
+    file.ignore(79);
     while(getline(file, line_str)) {
         stringstream line(line_str);
         string player_id;
@@ -241,11 +271,13 @@ void Basedball::read() {
         }
         string year;
         getline(line, year, ',');
-        for (int i = 0; i < 4; i++)
-            line.ignore(100, ',');
+        string team_id;
+        getline(line, team_id, ',');
+        string lg_id;
+        getline(line, lg_id, ',');
         string at_bats;
         getline(line, at_bats, ',');
-        if (at_bats == "")
+        if (at_bats == "") // Might replace with -1 instead to signify "Not found". Thoughts?
             at_bats = "0";
         string runs;
         getline(line, runs, ',');
@@ -275,6 +307,10 @@ void Basedball::read() {
         getline(line, stolen_bases, ',');
         if (stolen_bases == "")
             stolen_bases = "0";
+        string caught_stealing;
+        getline(line, caught_stealing, ',');
+        if (caught_stealing == "")
+            caught_stealing = "0";
         string walks;
         getline(line, walks, ',');
         if (walks == "")
@@ -299,6 +335,10 @@ void Basedball::read() {
         getline(line, sac_flies, ',');
         if (sac_flies == "")
             sac_flies = "0";
+        string groundouts;
+        getline(line, groundouts);
+        if (groundouts == "" )
+            groundouts = "0";
         auto yr = player_vect[idx].seasons.find(stoi(year));
         if (yr != player_vect[idx].seasons.end()) {
             yr->second.at_bats = stoi(at_bats);
@@ -309,16 +349,26 @@ void Basedball::read() {
             yr->second.home_runs = stoi(home_runs);
             yr->second.rbi = stoi(rbi);
             yr->second.stolen_bases = stoi(stolen_bases);
+            yr->second.caught_stealing = stoi(caught_stealing);
             yr->second.walks = stoi(walks);
             yr->second.strikeouts = stoi(strikeouts);
             yr->second.intentional_walks = stoi(intentional_walks);
             yr->second.hit_by_pitch = stoi(hit_by_pitch);
             yr->second.sac_bunts = stoi(sac_bunts);
             yr->second.sac_flies = stoi(sac_flies);
-            double batting_avg = stod(hits) / stod(at_bats);
-            double slugging = (stod(hits) + stod(doubles) + 2 * stod(triples) + 3 * stod(home_runs)) / stod(at_bats);
-            double obp = (stod(hits) + stod(walks) + stod(hit_by_pitch)) / (stod(at_bats) + stod(walks) + stod(hit_by_pitch) + stod(sac_flies));
-            double ops = slugging + obp;
+            yr->second.groundouts = stoi(groundouts);
+            double batting_avg = 0;
+            double obp = 0;
+            double slugging = 0;
+            double ops = 0;
+            if((stod(at_bats) + stod(walks) + stod(hit_by_pitch) + stod(sac_flies)) != 0)
+                obp = (stod(hits) + stod(walks) + stod(hit_by_pitch)) / (stod(at_bats) + stod(walks) + stod(hit_by_pitch) + stod(sac_flies));
+            if (stoi(at_bats) != 0) {
+                batting_avg = stod(hits) / stod(at_bats);
+                slugging =(stod(hits) + stod(doubles) + 2 * stod(triples) + 3 * stod(home_runs)) / stod(at_bats);
+                ops = slugging + obp;
+
+            }
             yr->second.batting_avg = batting_avg;
             yr->second.slugging = slugging;
             yr->second.obp = obp;
@@ -334,34 +384,45 @@ void Basedball::read() {
             stats.home_runs = stoi(home_runs);
             stats.rbi = stoi(rbi);
             stats.stolen_bases = stoi(stolen_bases);
+            stats.caught_stealing = stoi(caught_stealing);
             stats.walks = stoi(walks);
             stats.strikeouts = stoi(strikeouts);
             stats.intentional_walks = stoi(intentional_walks);
             stats.hit_by_pitch = stoi(hit_by_pitch);
             stats.sac_bunts = stoi(sac_bunts);
             stats.sac_flies = stoi(sac_flies);
-            double batting_avg = stod(hits) / stod(at_bats);
-            double slugging = (stod(hits) + stod(doubles) + 2 * stod(triples) + 3 * stod(home_runs)) / stod(at_bats);
-            double obp = (stod(hits) + stod(walks) + stod(hit_by_pitch)) / (stod(at_bats) + stod(walks) + stod(hit_by_pitch) + stod(sac_flies));
-            double ops = slugging + obp;
+            stats.groundouts = stoi(groundouts);
+            double batting_avg = 0;
+            double obp = 0;
+            double slugging = 0;
+            double ops = 0;
+            if((stod(at_bats) + stod(walks) + stod(hit_by_pitch) + stod(sac_flies)) != 0)
+                obp = (stod(hits) + stod(walks) + stod(hit_by_pitch)) / (stod(at_bats) + stod(walks) + stod(hit_by_pitch) + stod(sac_flies));
+            if (stoi(at_bats) != 0) {
+                batting_avg = stod(hits) / stod(at_bats);
+                slugging =(stod(hits) + stod(doubles) + 2 * stod(triples) + 3 * stod(home_runs)) / stod(at_bats);
+                ops = slugging + obp;
+
+            }
             stats.batting_avg = batting_avg;
             stats.slugging = slugging;
             stats.obp = obp;
             stats.ops = ops;
             player_vect[idx].seasons.emplace(stoi(year), stats);
         }
-        player_vect[idx].print(stoi(year));
+//        player_vect[idx].print(stoi(year));
     }
 
     file.close();
     file.clear();
-    file.open("pitching.csv");
-    file.ignore(118);
+    file.open("Pitching.csv");
+    file.ignore(102);
 
     while(getline(file, line_str)) {
         stringstream line(line_str);
         string player_id;
         getline(line, player_id, ',');
+        pitchers.insert(player_id);
         int first = 0;
         int last = player_vect.size();
         int middle = player_vect.size() / 2;
@@ -382,8 +443,18 @@ void Basedball::read() {
         }
         string year;
         getline(line, year, ',');
-        for (int i = 0; i < 4; i++)
-            line.ignore(100, ',');
+        string team_id;
+        getline(line, team_id, ',');
+        string lg_id;
+        getline(line, lg_id, ',');
+        string wins;
+        getline(line, wins, ',');
+        if (wins == "")
+            wins = "0";
+        string losses;
+        if (losses == "")
+            losses = "0";
+        getline(line, losses, ',');
         string complete_games;
         getline(line, complete_games, ',');
         if (complete_games == "")
@@ -404,18 +475,22 @@ void Basedball::read() {
         getline(line, hits_allowed, ',');
         if (hits_allowed == "")
             hits_allowed = "0";
+        string earned_runs;
+        getline(line, earned_runs, ',');
+        if (earned_runs == "")
+            earned_runs = "0";
         string hr_allowed;
         getline(line, hr_allowed, ',');
         if (hr_allowed == "")
             hr_allowed = "0";
-        string so_issued;
-        getline(line, so_issued, ',');
-        if (so_issued == "")
-            so_issued = "0";
         string bb_allowed;
         getline(line, bb_allowed, ',');
         if (bb_allowed == "")
             bb_allowed = "0";
+        string so_issued;
+        getline(line, so_issued, ',');
+        if (so_issued == "")
+            so_issued = "0";
         string ba_opp;
         getline(line, ba_opp, ',');
         if (ba_opp == "")
@@ -457,11 +532,13 @@ void Basedball::read() {
         if (sh_issued == "")
             sh_issued = "0";
         string sf_issued;
-        getline(line, sf_issued, ',');
+        getline(line, sf_issued);
         if (sf_issued == "")
             sf_issued = "0";
         auto yr = player_vect[idx].pitching_seasons.find(stoi(year));
         if (yr != player_vect[idx].pitching_seasons.end()) {
+            yr->second.wins = stoi(wins);
+            yr->second.losses = stoi(losses);
             yr->second.complete_games = stoi(complete_games);
             yr->second.shutouts = stoi(shutouts);
             yr->second.saves = stoi(saves);
@@ -487,6 +564,8 @@ void Basedball::read() {
         }
         else {
             Player::PStats pstats;
+            pstats.wins = stoi(wins);
+            pstats.losses = stoi(losses);
             pstats.complete_games = stoi(complete_games);
             pstats.shutouts = stoi(shutouts);
             pstats.saves = stoi(saves);
@@ -511,6 +590,7 @@ void Basedball::read() {
             pstats.sf_issued = stoi(sf_issued);
             player_vect[idx].pitching_seasons.emplace(stoi(year), pstats);
         }
-        player_vect[idx].print(stoi(year));
     }
+    for (int i = 0; i < player_vect.size(); i++)
+        player_vect[i].print();
 }
