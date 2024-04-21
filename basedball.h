@@ -363,7 +363,7 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
     };
     class MaxHeap {
     private:
-        vector<Player> data;
+        vector<Player> data; // stores heap elements
         const ComparePlayers* comparator; // points to comparator object
         int year1, year2;
     public:
@@ -413,6 +413,18 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
                 swap(data[idx], data[largest]);
                 heapifyDown(largest);
             }
+        }
+        void heapSort(vector<Player>& players, ComparePlayers& comp, int year1, int year2){
+            MaxHeap h(comp, year1, year2);
+            for(const Player& player : players) {
+                h.addPlayer(player);
+            }
+            vector<Player> sorted;
+            while (!h.isEmpty()) {
+                sorted.push_back(h.extractMax());
+            }
+            reverse(sorted.begin(),sorted.end());
+            players = sorted;
         }
     };
 
