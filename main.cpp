@@ -37,7 +37,7 @@ int main() {
             << endl;
     bool run = true;
     unordered_set<int> years;
-    for (int i = 1871; i < 2023)
+    for (int i = 1871; i < 2023; i++)
         years.insert(i);
     unordered_set<string> teams;
     teams.insert(based.AL.begin(), based.AL.end());
@@ -194,7 +194,7 @@ int main() {
         }
 
         else if (regex_match(op1, league_in)) {
-            set<string> new_lgs;
+            unordered_set<string> new_lgs;
             vector<string> args;
             string tmp;
             while(getline(iline, tmp, ' '))
@@ -214,13 +214,15 @@ int main() {
                         new_lgs.insert(args[i]);
                 }
                 if (ins) {
+                    leagues = new_lgs;
                     for (int i = 0; i < args.size(); i++)
-                        cout << "Inserted " << args[i] << "!\n";
+                        cout << "Added " << args[i] << "!\n";
                 }
             }
         }
 
         else if (regex_match(op1, team_in)) {
+            unordered_set<string> new_teams;
             vector<string> args;
             string tmp;
             while(getline(iline, tmp, ' '))
@@ -233,25 +235,36 @@ int main() {
                     ins = false;
                     break;
                 }
-                else if (!teams.contains(args[i]))
-                    teams.insert(args[i]);
                 else
-                    args.erase(remove(args.begin(), args.end(), args[i]), args.end());
+                    new_teams.insert(args[i]);
             }
             if (ins) {
+                teams = new_teams;
                 for (int i = 0; i < args.size(); i++)
                     cout << "Inserted " << args[i] << "!\n";
             }
         }
 
         else if (regex_match(op1, sort_in)) {
-            string op2;
-            getline(iline, op2);
+            string op2, op3;
+            getline(iline, op2, ' ');
+            getline(iline, op3);
+            if (op3 != "asc" && op3 != "desc") {
+                invalid();
+                break;
+            }
+
             if (op2 == "last_name") {
+                if (op3 == "asc")
+                Basedball::MaxHeap heap(Basedball::CompareLastName);
 
             }
 
         }
+
+        else
+            invalid();
+
 
 //        else if (regex_match(op1, player_in)) {
 //            vector<string> args;

@@ -392,6 +392,11 @@ public:
             return a.pitching_seasons.at(yr1).sf_issued > b.pitching_seasons.at(yr2).sf_issued;
         }
     };
+    class CompareLastName : public ComparePlayers {
+        bool operator()(const Player& a, const int& yr1, const Player& b, const int& yr2) const override {
+            return a.last_name > b.last_name;
+        }
+    };
 
     class CompareByBattingAvgDesc : public ComparePlayers {
     public:
@@ -643,13 +648,17 @@ public:
             return a.pitching_seasons.at(yr1).sf_issued < b.pitching_seasons.at(yr2).sf_issued;
         }
     };
+    class CompareLastNameDesc : public ComparePlayers {
+        bool operator()(const Player& a, const int& yr1, const Player& b, const int& yr2) const override {
+            return a.last_name < b.last_name;
+        }
+    };
 
     class MaxHeap {
         Player p;
     private:
         vector<Player> data; // stores heap elements
         const ComparePlayers* comparator; // points to comparator object
-        int year1, year2;
     public:
         MaxHeap(const ComparePlayers& comp) : comparator(&comp) {}
         void addPlayer(const Player& value, int year) {
@@ -687,10 +696,10 @@ public:
             int left = 2 * idx + 1;
             int right = 2 * idx + 2;
 
-            if (left < size && (*comparator)(data[left], year1, data[largest], year2)) {
+            if (left < size && (*comparator)(data[left], data[left].seasons.begin()->first, data[largest], data[largest].seasons.begin()->first)) {
                 largest = left;
             }
-            if (right < size && (*comparator)(data[right], year1, data[largest], year2)) {
+            if (right < size && (*comparator)(data[right], data[right].seasons.begin()->first, data[largest], data[largest].seasons.begin()->first)) {
                 largest = right;
             }
 
@@ -699,11 +708,11 @@ public:
                 heapifyDown(largest);
             }
         }
-        void heapSort(vector<Player>& players, ComparePlayers& comp, int year1, int year2){
-            MaxHeap h(comp, year1, year2);
+        void heapSort(vector<Player>& players, ComparePlayers& comp){
+            MaxHeap h(comp);
             for(const Player& player : players) {
-                h.addPlayer(player, year1);
-                h.addPlayer(player, year2);
+                h.addPlayer(player, player.seasons.begin()->first);
+                h.addPlayer(player, player.seasons.begin()->first);
             }
             vector<Player> sorted;
             while (!h.isEmpty()) {
