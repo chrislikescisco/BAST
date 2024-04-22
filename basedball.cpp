@@ -129,7 +129,51 @@ bool Basedball::DefaultLT::operator()(Basedball::Player player1, Basedball::Play
         return false;
 }
 
+int Basedball::find(string player_id) {
+    int idx;
+    int first = 0;
+    int last = player_vect.size();
+    int middle = player_vect.size() / 2;
+    while (player_vect[middle].player_id != player_id) { // Binary search to find player in the vector
+//            cout << "first: " << first << " middle: " << middle << " last: " << last << " ID: " << player_vect[middle].player_id << endl;
+        if (first > last) {
+            idx = -1;
+            break;
+        } else if (player_vect[middle].player_id < player_id) {
+            first = middle + 1;
+            middle = (last + first) / 2;
+            idx = middle;
+        } else {
+            last = middle - 1;
+            middle = (last + first) / 2;
+            idx = middle;
+        }
+    }
+    return idx;
+}
+
 Basedball::Basedball() = default;
+
+unordered_set<string> Basedball::AL = {"ANA", "BAL", "BLA", "BOS", "CAL", "CHA", "CLE", "DET",
+                                       "HOU", "KC1", "KCA", "LAA", "MIN", "ML4", "MLA", "NYA",
+                                       "OAK", "PHA", "SE1", "SEA", "SLA", "TBA", "TEX", "TOR",
+                                       "WS1", "WS2", };
+unordered_set<string> Basedball::NL = {"ARI", "ATL", "BFN", "BLN", "BRO", "BSN", "CHN", "CIN",
+                                       "CL2", "CL4", "CN1", "COL", "DTN", "FLO", "HAR", "HOU",
+                                       "IN1", "IN3", "KCN", "LAN", "LS1", "LS3", "MIA", "MIL",
+                                       "ML1", "ML2", "MON", "NY1", "NY3", "NYN", "PHI", "PHN",
+                                       "PIT", "PRO", "SDN", "SFN", "SL3", "SL5", "SLN", "SR1",
+                                       "TRN", "WAS", "WOR", "WS8"};
+unordered_set<string> Basedball::other = {"BL2", "BR3", "BR4", "BS2", "CL3", "CL5", "CL6",
+                                          "CN2", "CN3", "IN2", "KC2", "LS2", "ML3", "NY4", "PH4",
+                                          "PT1", "RC2", "RIC", "SL4", "SR2", "TL1", "TL2", "WS7",
+                                          "WS9", "BLF", "BRF", "BUF", "CHF", "KCF", "NEW", "PTF",
+                                          "SLF", "BL1", "BR1", "BR2", "BS1", "CH1", "CH2", "CL1",
+                                          "ELI", "FW1", "HR1", "KEO", "MID", "NH1", "NY2", "PH1",
+                                          "PH2", "PH3", "RC1", "SL1", "SL2", "TRO", "WS3", "WS4",
+                                          "WS6", "BFP", "BRP", "BSP", "CHP", "CLP", "NYP", "PHP",
+                                          "PTP", "ALT", "BLU", "BSU", "CHU", "CNU", "KCU", "MLU",
+                                          "PHU", "SLU", "SPU", "WIL", "WSU"};
 
 void Basedball::read() {
     ifstream file;
@@ -357,6 +401,7 @@ void Basedball::read() {
             yr->second.sac_bunts = stoi(sac_bunts);
             yr->second.sac_flies = stoi(sac_flies);
             yr->second.groundouts = stoi(groundouts);
+            yr->second.team = team_id;
             double batting_avg = 0;
             double obp = 0;
             double slugging = 0;
@@ -392,6 +437,7 @@ void Basedball::read() {
             stats.sac_bunts = stoi(sac_bunts);
             stats.sac_flies = stoi(sac_flies);
             stats.groundouts = stoi(groundouts);
+            stats.team = team_id;
             double batting_avg = 0;
             double obp = 0;
             double slugging = 0;
@@ -561,6 +607,7 @@ void Basedball::read() {
             yr->second.runs_given = stoi(runs_given);
             yr->second.sh_issued = stoi(sh_issued);
             yr->second.sf_issued = stoi(sf_issued);
+            yr->second.team = team_id;
         }
         else {
             Player::PStats pstats;
@@ -588,6 +635,7 @@ void Basedball::read() {
             pstats.runs_given = stoi(runs_given);
             pstats.sh_issued = stoi(sh_issued);
             pstats.sf_issued = stoi(sf_issued);
+            pstats.team = team_id;
             player_vect[idx].pitching_seasons.emplace(stoi(year), pstats);
         }
     }

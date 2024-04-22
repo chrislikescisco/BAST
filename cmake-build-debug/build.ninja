@@ -51,7 +51,8 @@ build cmake_object_order_depends_target_BAST: phony || CMakeFiles/BAST.dir
 
 build CMakeFiles/BAST.dir/main.cpp.obj: CXX_COMPILER__BAST_unscanned_Debug C$:/Users/thatp/CLionProjects/BAST/main.cpp || cmake_object_order_depends_target_BAST
   DEP_FILE = CMakeFiles\BAST.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/thatp/CLionProjects/BAST/include
   OBJECT_DIR = CMakeFiles\BAST.dir
   OBJECT_FILE_DIR = CMakeFiles\BAST.dir
   TARGET_COMPILE_PDB = CMakeFiles\BAST.dir\
@@ -59,7 +60,8 @@ build CMakeFiles/BAST.dir/main.cpp.obj: CXX_COMPILER__BAST_unscanned_Debug C$:/U
 
 build CMakeFiles/BAST.dir/basedball.cpp.obj: CXX_COMPILER__BAST_unscanned_Debug C$:/Users/thatp/CLionProjects/BAST/basedball.cpp || cmake_object_order_depends_target_BAST
   DEP_FILE = CMakeFiles\BAST.dir\basedball.cpp.obj.d
-  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/thatp/CLionProjects/BAST/include
   OBJECT_DIR = CMakeFiles\BAST.dir
   OBJECT_FILE_DIR = CMakeFiles\BAST.dir
   TARGET_COMPILE_PDB = CMakeFiles\BAST.dir\
