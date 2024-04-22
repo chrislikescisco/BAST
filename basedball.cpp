@@ -591,6 +591,6 @@ void Basedball::read() {
             player_vect[idx].pitching_seasons.emplace(stoi(year), pstats);
         }
     }
-    for (int i = 0; i < player_vect.size(); i++)
-        player_vect[i].print();
+//    for (int i = 0; i < player_vect.size(); i++)
+//        player_vect[i].print();
 }
