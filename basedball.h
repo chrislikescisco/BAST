@@ -29,6 +29,24 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         string throws;
         Player();
         Player(string player_id_, string first_name_, string last_name_, string bats_, string throws_);
+        void filterYear(int year) {
+          for(auto it = seasons.begin(); it != seasons.end();){
+               if(it->first != year){
+                  it = seasons.erase(it);
+               }
+               else{
+                   ++it;
+               }
+          }
+          for(auto it = pitching_seasons.begin(); it != pitching_seasons.end();){
+              if(it->first != year){
+                  it = pitching_seasons.erase(it);
+              }
+              else{
+                  ++it;
+              }
+          }
+        }
         struct Stats {
             int games;
             // Hitting stats:
@@ -366,13 +384,15 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         }
     };
     class MaxHeap {
+        Player p;
     private:
         vector<Player> data; // stores heap elements
         const ComparePlayers* comparator; // points to comparator object
         int year1, year2;
     public:
         MaxHeap(const ComparePlayers& comp, int yr1, int yr2) : comparator(&comp), year1(yr1), year2(yr2) {}
-        void addPlayer(const Player& value) {
+        void addPlayer(const Player& value, int year) {
+            p.filterYear(year);
             data.push_back(value);
             int i = data.size() - 1;
             while (i != 0) {
@@ -421,7 +441,8 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         void heapSort(vector<Player>& players, ComparePlayers& comp, int year1, int year2){
             MaxHeap h(comp, year1, year2);
             for(const Player& player : players) {
-                h.addPlayer(player);
+                h.addPlayer(player, year1);
+                h.addPlayer(player, year2);
             }
             vector<Player> sorted;
             while (!h.isEmpty()) {
