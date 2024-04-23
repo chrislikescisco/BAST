@@ -395,6 +395,7 @@ int main() {
                 invalid();
                 break;
             }
+            stats.insert(op2);
             cout << "Sorting database..." << endl;
             Basedball::MaxHeap heap(*cmp);
             heap.heapSort(based.player_vect, *cmp, leagues, teams, years);
@@ -413,6 +414,14 @@ int main() {
                 r << "League";
             if (stats.contains("POS"))
                 r << "POS";
+            if (stats.contains("BA"))
+                r << "BA";
+            if (stats.contains("SLG"))
+                r << "SLG";
+            if (stats.contains("OBP"))
+                r << "OBP";
+            if (stats.contains("OPS"))
+                r << "OPS";
             if (stats.contains("AB"))
                 r << "AB";
             if (stats.contains("R"))
@@ -515,49 +524,65 @@ int main() {
             unordered_set<string> included;
             for (int i = 0; i < based.player_vect.size(); i++) {
                 tabulate::RowStream r2{};
-                r2 << player_vect[i].
+                auto s = based.player_vect[i].seasons.begin();
+                r2 << based.player_vect[i].first_name << based.player_vect[i].last_name << s->first;
                 if (stats.contains("Bats"))
-                    r2 << player_vect[i].bats;
+                    r2 << based.player_vect[i].bats;
                 if (stats.contains("Throws"))
-                    r2 << player_vect[i].throws;
+                    r2 << based.player_vect[i].throws;
                 if (stats.contains("POS"))
-                    r2 << player_vect;
+                    r2 << based.player_vect[i].position;
+                if (stats.contains("BA"))
+                    r << s->second.batting_avg;
+                if (stats.contains("SLG"))
+                    r << s->second.slugging;
+                if (stats.contains("OBP"))
+                    r << s->second.obp;
+                if (stats.contains("OPS"))
+                    r << s->second.ops;
                 if (stats.contains("Team"))
-                    r2 << "Team";
-                if (stats.contains("League"))
-                    r2 << "League";
+                    r2 << s->second.team;
+                if (stats.contains("League")) {
+                    if (based.AL.contains(s->second.team))
+                        r2 << "AL";
+                    else if (based.NL.contains(s->second.team))
+                        r2 << "NL";
+                    else
+                        r2 << "Other";
+                }
                 if (stats.contains("AB"))
-                    r2 << "AB";
+                    r2 << s->second.at_bats;
                 if (stats.contains("R"))
-                    r2 << "R";
+                    r2 << s->second.runs;
                 if (stats.contains("H"))
-                    r2 << "H";
+                    r2 << s->second.hits;
                 if (stats.contains("2B"))
-                    r2 << "2B";
+                    r2 << s->second.doubles;
                 if (stats.contains("3B"))
-                    r2 << "3B";
+                    r2 << s->second.triples;
                 if (stats.contains("HR"))
-                    r2 << "HR";
+                    r2 << s->second.home_runs;
                 if (stats.contains("RBI"))
-                    r2 << "RBI";
+                    r2 << s->second.rbi;
                 if (stats.contains("SB"))
-                    r2 << "SB";
+                    r2 << s->second.stolen_bases;
                 if (stats.contains("CS"))
-                    r2 << "CS";
+                    r2 << s->second.caught_stealing;
                 if (stats.contains("BB"))
-                    r2 << "BB";
+                    r2 << s->second.walks;
                 if (stats.contains("SO"))
-                    r2 << "SO";
+                    r2 << s->second.strikeouts;
                 if (stats.contains("IBB"))
-                    r2 << "IBB";
+                    r2 << s->second.intentional_walks;
                 if (stats.contains("HBP"))
-                    r2 << "HBP";
+                    r2 << s->second.hit_by_pitch;
                 if (stats.contains("SH"))
-                    r2 << "SH";
+                    r2 << s->second.sac_bunts;
                 if (stats.contains("SF"))
-                    r2 << "SF";
+                    r2 << s->second.sac_flies;
                 if (stats.contains("GIDP_F"))
                     r2 << "GIDP_F";
+                playas.add_row(r2);
             }
             cout << playas << endl;
 

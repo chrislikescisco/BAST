@@ -180,10 +180,7 @@ const unordered_set<string> Basedball::valid_stats = {"Bats", "Throws", "Team", 
                                                       "InnOuts", "PO", "A", "E", "DP", "PB", "SB", "CS", "ZR",
                                                       "W", "L", "CG", "SHO", "SV", "IPouts", "H_P", "ER", "HR_P",
                                                       "BB_P", "SO_P", "BAOpp", "ERA", "IBB_P", "WP", "HBP_P", "BK",
-                                                      "BFP", "GF", "R", "SH_P", "SF_P"}
-
-
-};
+                                                      "BFP", "GF", "R", "SH_P", "SF_P"};
 
 void Basedball::read() {
     ifstream file;
@@ -433,7 +430,7 @@ void Basedball::read() {
             Player::Stats stats;
             stats.at_bats = stoi(at_bats);
             stats.runs = stoi(runs);
-            stats.runs = stoi(hits);
+            stats.hits = stoi(hits);
             stats.doubles = stoi(doubles);
             stats.triples = stoi(triples);
             stats.home_runs = stoi(home_runs);
