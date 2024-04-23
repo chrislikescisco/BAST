@@ -665,8 +665,8 @@ public:
     public:
         MaxHeap(const ComparePlayers& comp) : comparator(&comp) {}
         vector<Player> data; // stores heap elements
-        void addPlayer(const Player& value, int year) {
-            p.filterYear(year);
+        void addPlayer(Player& value, int year) {
+            value.filterYear(year);
             data.push_back(value);
             int i = data.size() - 1;
             while (i != 0) {
@@ -715,7 +715,7 @@ public:
         void heapSort(vector<Player>& players, ComparePlayers& comp, unordered_set<string> leagues, unordered_set<string> teams,
                         unordered_set<int> years){
             MaxHeap h(comp);
-            for(const Player& player : players) {
+            for(Player& player : players) {
                 for(auto iter = player.seasons.begin(); iter != player.seasons.end(); iter++) {
                     if (!years.contains(iter->first) || !teams.contains(iter->second.team))
                         continue;
@@ -743,7 +743,7 @@ public:
         void heapSortP(vector<Player>& players, ComparePlayers& comp, unordered_set<string> leagues, unordered_set<string> teams,
                       unordered_set<int> years){
             MaxHeap h(comp);
-            for(const Player& player : players) {
+            for(Player& player : players) {
                 for(auto iter = player.pitching_seasons.begin(); iter != player.pitching_seasons.end(); iter++) {
                     if (!pitchers.contains(player.player_id))
                         break;

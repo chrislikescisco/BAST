@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <regex>
 #include <tabulate/tabulate.hpp>
 #include "basedball.h"
@@ -45,7 +46,7 @@ int main() {
     teams.insert(based.other.begin(), based.other.end());
     string sort = "last_name";
     unordered_set<string> leagues = {"AL", "NL", "other"};
-    unordered_set<string> stats = {"BA", "Throws", "Catches"};
+    unordered_set<string> stats = {"Year", "Throws"};
 
     while (run) {
         cout << "enter a command (type \"help\" for a list of commands):" << endl;
@@ -389,165 +390,163 @@ int main() {
                 else if (op3 == "desc")
                     cmp = new Basedball::CompareSacFliesDesc;
             }
-            if (op2 == "game_started") {
+            else if (op2 == "game_started") {
                 if (op3 == "asc")
                     Basedball::CompareGameStarted cmp;
                 if (op3 == "desc")
                     Basedball::CompareGameStartedDesc cmp;
             }
-            if (op2 == "IO") {
+            else if (op2 == "IO") {
                 if (op3 == "asc")
                     Basedball::CompareInOut cmp;
                 if (op3 == "desc")
                     Basedball::CompareInOutDesc cmp;
             }
-            if (op2 == "putouts") {
+            else if (op2 == "putouts") {
                 if (op3 == "asc")
                     Basedball::ComparePutOuts cmp;
                 if (op3 == "desc")
                     Basedball::ComparePutOutsDesc cmp;
             }
-            if (op2 == "assists") {
+            else if (op2 == "assists") {
                 if (op3 == "asc")
                     Basedball::CompareAssists cmp;
                 if (op3 == "desc")
                     Basedball::CompareAssistsDesc cmp;
             }
-            if (op2 == "errors") {
+            else if (op2 == "errors") {
                 if (op3 == "asc")
                     Basedball::CompareErrors cmp;
                 if (op3 == "desc")
                     Basedball::CompareErrosDesc cmp;
             }
-            if (op2 == "double plays") {
+            else if (op2 == "double plays") {
                 if (op3 == "asc")
                     Basedball::CompareDoublePlays cmp;
                 if (op3 == "desc")
                     Basedball::CompareDoublePlaysDesc cmp;
             }
-            if (op2 == "passed balls") {
+            else if (op2 == "passed balls") {
                 if (op3 == "asc")
                     Basedball::ComparePassedBalls cmp;
                 if (op3 == "desc")
                     Basedball::ComparePassedBallsDesc cmp;
             }
-            if (op2 == "stolen bases allowed") {
+            else if (op2 == "stolen bases allowed") {
                 if (op3 == "asc")
                     Basedball::CompareStolenBases cmp;
                 if (op3 == "desc")
                     Basedball::CompareStolenBasesDesc cmp;
             }
-            if (op2 == "caught_stealing_inf") {
+            else if (op2 == "caught_stealing_inf") {
                 if (op3 == "asc")
                     Basedball::ComparedStealingInf cmp;
                 if (op3 == "desc")
                     Basedball::ComparedStealingInfDesc cmp;
             }
-            if (op2 == "zone rating") {
+            else if (op2 == "zone rating") {
                 if (op3 == "asc")
                     Basedball::ComparedZoneRating cmp;
                 if (op3 == "desc")
                     Basedball::ComparedZoneRatingDesc cmp;
             }
-            if (op2 == "complete games") {
+            else if (op2 == "complete games") {
                 if (op3 == "asc")
                     Basedball::ComparedCompleteGames cmp;
                 if (op3 == "desc")
                     Basedball::ComparedCompleteGamesDesc cmp;
             }
-            if(op2 == "shutouts") {
+            else if (op2 == "shutouts") {
                 if (op3 == "asc")
                     Basedball::ComparedShutouts cmp;
                 if (op3 == "desc")
                     Basedball::ComparedShutoutsDesc cmp;
             }
-            if (op2 == "saves") {
+            else if (op2 == "saves") {
                 if (op3 == "asc")
                     Basedball::ComparedSaved cmp;
                 if (op3 == "desc")
                     Basedball::ComparedSavedDesc cmp;
             }
-            if (op2 == "ip outs") {
+            else if (op2 == "ip outs") {
                 if (op3 == "asc")
                     Basedball::ComparedIp cmp;
                 if (op3 == "desc")
                     Basedball::ComparedIpDesc cmp;
             }
-            if (op2 == "hits allowed") {
+            else if (op2 == "hits allowed") {
                 if (op3 == "asc")
                     Basedball::ComparedHitsAll cmp;
                 if (op3 == "desc")
                     Basedball::ComparedHitsAllDesc cmp;
             }
-            if (op2 == "hr_allowed") {
+            else if (op2 == "hr_allowed") {
                 if (op3 == "asc")
                     Basedball::ComparedHrAll cmp;
                 if (op3 == "desc")
                     Basedball::ComparedHrAllDesc cmp;
             }
-            if (op2 == "so_issued") {
+            else if (op2 == "so_issued") {
                 if (op3 == "asc")
                     Basedball::ComparedSoIssued cmp;
                 if (op3 == "desc")
                     Basedball::ComparedSoIssuedDesc cmp;
             }
-            if (op2 == "bb_allowed") {
+            else if (op2 == "bb_allowed") {
                 if (op3 == "asc")
                     Basedball::ComparedBbAll cmp;
                 if (op3 == "desc")
                     Basedball::ComparedBbAllDesc cmp;
             }
-            if (op2 == "ba_opp") {
+            else if (op2 == "ba_opp") {
                 if (op3 == "asc")
                     Basedball::ComparedBaOpp cmp;
                 if (op3 == "desc")
                     Basedball::ComparedBaOppDesc cmp;
             }
-            if (op2 == "era") {
+            else if (op2 == "era") {
                 if (op3 == "asc")
                     Basedball::CompareEra cmp;
                 if (op3 == "desc")
                     Basedball::CompareEraDesc cmp;
             }
-            if (op2 == "iw_issued") {
+            else if (op2 == "iw_issued") {
                 if (op3 == "asc")
                     Basedball::CompareIwIssued cmp;
                 if (op3 == "desc")
                     Basedball::CompareIwIssuedDesc cmp;
             }
-            if (op2 == "wild_pitches") {
+            else if (op2 == "wild_pitches") {
                 if (op3 == "asc")
                     Basedball::CompareWildPitches cmp;
-                if (op3 == "desc")
+                else if (op3 == "desc")
                     Basedball::CompareWildPitchesDesc cmp;
             }
-            if (op2 == "hbp_issued") {
+            else if (op2 == "hbp_issued") {
                 if (op3 == "asc")
                     Basedball::CompareHbpIssued cmp;
-                if (op3 == "desc")
+                else if (op3 == "desc")
                     Basedball::CompareHbpIssuedDesc cmp;
             }
-            if (op2 == "balks") {
+            else if (op2 == "balks") {
                 if (op3 == "asc")
                     Basedball::CompareBalks cmp;
-                if (op3 == "desc")
+                else if (op3 == "desc")
                     Basedball::CompareBalksDesc cmp;
             }
-            if (op2 == "batters_facing_pitchers") {
+            else if (op2 == "batters_facing_pitchers") {
                 if (op3 == "asc")
                     Basedball::CompareBattersvPitcher cmp;
-                if (op3 == "desc")
+                else if (op3 == "desc")
                     Basedball::CompareBattersvPitcherDesc cmp;
             }
-            if (op2 == "games_finished") {
+            else if (op2 == "games_finished") {
                 if (op3 == "asc")
                     Basedball::CompareGamesFinished cmp;
-                if (op3 == "desc")
+                else if (op3 == "desc")
                     Basedball::CompareGamesFinishedDesc cmp;
             }
-
             else {
-                Basedball::CompareSacs cmp;
                 invalid();
                 break;
             }
@@ -562,8 +561,6 @@ int main() {
                 r << "Bats";
             if (stats.contains("Throws"))
                 r << "Throws";
-            if (stats.contains("Year"))
-                r << "Year";
             if (stats.contains("Team"))
                 r << "Team";
             if (stats.contains("League"))
@@ -689,11 +686,11 @@ int main() {
                 if (stats.contains("POS"))
                     r2 << based.player_vect[i].position;
                 if (stats.contains("BA"))
-                    r << s->second.batting_avg;
+                    r << setprecision(3) << fixed << s->second.batting_avg;
                 if (stats.contains("SLG"))
-                    r << s->second.slugging;
+                    r << setprecision(3) << fixed << s->second.slugging;
                 if (stats.contains("OBP"))
-                    r << s->second.obp;
+                    r << setprecision(3) << fixed<< s->second.obp;
                 if (stats.contains("OPS"))
                     r << s->second.ops;
                 if (stats.contains("Team"))
