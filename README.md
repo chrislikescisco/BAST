@@ -1,7 +1,7 @@
 # BAST
-Baseball Analysis and Search Tool (BAST) is a program designed to comprehensively display and compare statistics for Major League Baseball players active between 1871 and 2015. 
+Baseball Analysis and Search Tool (BAST) is a program designed to comprehensively display and compare statistics for Major League Baseball players active between 1871 and 2023. 
 
-All data used for this project can be found at https://www.kaggle.com/datasets/open-source-sports/baseball-databank
+All data used for this project can be found at [http://seanlahman.com/]
 
 Shield: [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
