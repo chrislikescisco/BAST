@@ -123,12 +123,14 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
         map<int, PStats> pitching_seasons;
         void print();
     };
-    static unordered_set<string> pitchers;
+
 public:
     int find(string player_id);
-    static unordered_set<string> AL;
-    static unordered_set<string> NL;
-    static unordered_set<string> other;
+    static const unordered_set<string> AL;
+    static const unordered_set<string> NL;
+    static const unordered_set<string> other;
+    static const unordered_set<string> valid_stats;
+    static unordered_set<string> pitchers;
 //        int wins;
 //        int losses;
 //        int games;
@@ -657,10 +659,10 @@ public:
     class MaxHeap {
         Player p;
     private:
-        vector<Player> data; // stores heap elements
         const ComparePlayers* comparator; // points to comparator object
     public:
         MaxHeap(const ComparePlayers& comp) : comparator(&comp) {}
+        vector<Player> data; // stores heap elements
         void addPlayer(const Player& value, int year) {
             p.filterYear(year);
             data.push_back(value);
@@ -708,11 +710,56 @@ public:
                 heapifyDown(largest);
             }
         }
-        void heapSort(vector<Player>& players, ComparePlayers& comp){
+        void heapSort(vector<Player>& players, ComparePlayers& comp, unordered_set<string> leagues, unordered_set<string> teams,
+                        unordered_set<int> years){
             MaxHeap h(comp);
             for(const Player& player : players) {
-                h.addPlayer(player, player.seasons.begin()->first);
-                h.addPlayer(player, player.seasons.begin()->first);
+                for(auto iter = player.seasons.begin(); iter != player.seasons.end(); iter++) {
+                    if (!years.contains(iter->first) || !teams.contains(iter->second.team))
+                        continue;
+                    bool lghas = false;
+                    if (leagues.contains("AL"))
+                        lghas = AL.contains(iter->second.team);
+                    else if (!lghas && leagues.contains("NL"))
+                        lghas = NL.contains(iter->second.team);
+                    else if (!lghas && leagues.contains("other"))
+                        lghas = other.contains(iter->second.team);
+                    if(!lghas)
+                        continue;
+                    h.addPlayer(player, iter->first);
+                }
+
+//                h.addPlayer(player, player.seasons.begin()->first);
+            }
+            vector<Player> sorted;
+            while (!h.isEmpty()) {
+                sorted.push_back(h.extractMax());
+            }
+            reverse(sorted.begin(),sorted.end());
+            players = sorted;
+        }
+        void heapSortP(vector<Player>& players, ComparePlayers& comp, unordered_set<string> leagues, unordered_set<string> teams,
+                      unordered_set<int> years){
+            MaxHeap h(comp);
+            for(const Player& player : players) {
+                for(auto iter = player.pitching_seasons.begin(); iter != player.pitching_seasons.end(); iter++) {
+                    if (!pitchers.contains(player.player_id))
+                        break;
+                    if (!years.contains(iter->first) || !teams.contains(iter->second.team))
+                        continue;
+                    bool lghas = false;
+                    if (leagues.contains("AL"))
+                        lghas = AL.contains(iter->second.team);
+                    else if (!lghas && leagues.contains("NL"))
+                        lghas = NL.contains(iter->second.team);
+                    else if (!lghas && leagues.contains("other"))
+                        lghas = other.contains(iter->second.team);
+                    if(!lghas)
+                        continue;
+                    h.addPlayer(player, iter->first);
+                }
+
+//                h.addPlayer(player, player.seasons.begin()->first);
             }
             vector<Player> sorted;
             while (!h.isEmpty()) {

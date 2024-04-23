@@ -154,17 +154,17 @@ int Basedball::find(string player_id) {
 
 Basedball::Basedball() = default;
 
-unordered_set<string> Basedball::AL = {"ANA", "BAL", "BLA", "BOS", "CAL", "CHA", "CLE", "DET",
+const unordered_set<string> Basedball::AL = {"ANA", "BAL", "BLA", "BOS", "CAL", "CHA", "CLE", "DET",
                                        "HOU", "KC1", "KCA", "LAA", "MIN", "ML4", "MLA", "NYA",
                                        "OAK", "PHA", "SE1", "SEA", "SLA", "TBA", "TEX", "TOR",
                                        "WS1", "WS2", };
-unordered_set<string> Basedball::NL = {"ARI", "ATL", "BFN", "BLN", "BRO", "BSN", "CHN", "CIN",
+const unordered_set<string> Basedball::NL = {"ARI", "ATL", "BFN", "BLN", "BRO", "BSN", "CHN", "CIN",
                                        "CL2", "CL4", "CN1", "COL", "DTN", "FLO", "HAR", "HOU",
                                        "IN1", "IN3", "KCN", "LAN", "LS1", "LS3", "MIA", "MIL",
                                        "ML1", "ML2", "MON", "NY1", "NY3", "NYN", "PHI", "PHN",
                                        "PIT", "PRO", "SDN", "SFN", "SL3", "SL5", "SLN", "SR1",
                                        "TRN", "WAS", "WOR", "WS8"};
-unordered_set<string> Basedball::other = {"BL2", "BR3", "BR4", "BS2", "CL3", "CL5", "CL6",
+const unordered_set<string> Basedball::other = {"BL2", "BR3", "BR4", "BS2", "CL3", "CL5", "CL6",
                                           "CN2", "CN3", "IN2", "KC2", "LS2", "ML3", "NY4", "PH4",
                                           "PT1", "RC2", "RIC", "SL4", "SR2", "TL1", "TL2", "WS7",
                                           "WS9", "BLF", "BRF", "BUF", "CHF", "KCF", "NEW", "PTF",
@@ -174,6 +174,16 @@ unordered_set<string> Basedball::other = {"BL2", "BR3", "BR4", "BS2", "CL3", "CL
                                           "WS6", "BFP", "BRP", "BSP", "CHP", "CLP", "NYP", "PHP",
                                           "PTP", "ALT", "BLU", "BSU", "CHU", "CNU", "KCU", "MLU",
                                           "PHU", "SLU", "SPU", "WIL", "WSU"};
+const unordered_set<string> Basedball::valid_stats = {"Bats", "Throws", "Year", "Team", "League", "AB", "R",
+                                                      "H", "2B", "3B", "HR", "RBI", "SB", "CS", "BB", "SO",
+                                                      "IBB", "HBP", "SH", "SF", "GIDP_F", "POS", "G", "GS",
+                                                      "InnOuts", "PO", "A", "E", "DP", "PB", "SB", "CS", "ZR",
+                                                      "W", "L", "CG", "SHO", "SV", "IPouts", "H_P", "ER", "HR_P",
+                                                      "BB_P", "SO_P", "BAOpp", "ERA", "IBB_P", "WP", "HBP_P", "BK",
+                                                      "BFP", "GF", "R", "SH_P", "SF_P"}
+
+
+};
 
 void Basedball::read() {
     ifstream file;

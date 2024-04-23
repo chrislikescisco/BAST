@@ -45,6 +45,7 @@ int main() {
     teams.insert(based.other.begin(), based.other.end());
     string sort = "last_name";
     unordered_set<string> leagues = {"AL", "NL", "other"};
+    unordered_set<string> stats = {"BA", "Throws", "Catches"};
 
     while (run) {
         cout << "enter a command (type \"help\" for a list of commands):" << endl;
@@ -228,7 +229,6 @@ int main() {
             bool ins = true;
             for (int i = 0; i < args.size(); i++) {
                 if (!based.AL.contains(args[i]) && !based.NL.contains(args[i]) && !based.other.contains(args[i])) {
-                    teams.clear();
                     invalid();
                     ins = false;
                     break;
@@ -238,6 +238,29 @@ int main() {
             }
             if (ins) {
                 teams = new_teams;
+                for (int i = 0; i < args.size(); i++)
+                    cout << "Inserted " << args[i] << "!\n";
+            }
+        }
+
+        else if (regex_match(op1, stats_in)) {
+            unordered_set<string> new_stats;
+            vector<string> args;
+            string tmp;
+            while(getline(iline, tmp, ' '))
+                args.push_back(tmp);
+            bool ins = true;
+            for (int i = 0; i < args.size(); i++) {
+                if (!based.valid_stats.contains(args[i])) {
+                    invalid();
+                    ins = false;
+                    break;
+                }
+                else
+                    new_stats.insert(args[i]);
+            }
+            if (ins) {
+                stats = new_stats;
                 for (int i = 0; i < args.size(); i++)
                     cout << "Inserted " << args[i] << "!\n";
             }
@@ -253,20 +276,32 @@ int main() {
             }
 
             if (op2 == "last_name") {
-                if (op3 == "asc") {
+                if (op3 == "asc")
                     Basedball::CompareLastName cmp;
-                    Basedball::MaxHeap heap(cmp);
-                    heap.heapSort(based.player_vect, cmp, leagues, teams, years);
-                    tabulate::Table playas;
-                    playas.add_row({"First Name", "Last Name", "Pos.", "Bats", "Throws"});
-                    for (int i = 0; i < heap.data.size(); i++)
-                        playas.add_row({heap.data[i].first_name, heap.data[i].last_name, heap.data[i].position, heap.data[i].bats, heap.data[i].throws});
-                    cout << playas << endl;
-                }
 
-
+                if (op3 == "desc")
+                    Basedball::CompareLastNameDesc cmp;
 
             }
+
+            if (op2 = "BA") {
+                if (op3 == )
+            }
+            cout << "Sorting database..." << endl;
+            Basedball::MaxHeap heap(cmp);
+            heap.heapSort(based.player_vect, cmp, leagues, teams, years);
+            tabulate::Table playas;
+            playas.add_row({"First Name", "Last Name", "Pos.", "Bats", "Throws"}); //
+            unordered_set<string> included;
+            for (int i = 0; i < based.player_vect.size(); i++) {
+                if (!included.contains(based.player_vect[i].player_id)) {
+                    playas.add_row({based.player_vect[i].first_name, based.player_vect[i].last_name,
+                                    based.player_vect[i].position, based.player_vect[i].bats,
+                                    based.player_vect[i].throws});
+                    included.insert(based.player_vect[i].player_id);
+                }
+            }
+            cout << playas << endl;
 
         }
 
