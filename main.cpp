@@ -259,13 +259,11 @@ int main() {
                     heap.heapSort(based.player_vect, cmp, leagues, teams, years);
                     tabulate::Table playas;
                     playas.add_row({"First Name", "Last Name", "Pos.", "Bats", "Throws"});
-                    for (int i = 0; i < heap.data.size(); i++)
-                        playas.add_row({heap.data[i].first_name, heap.data[i].last_name, heap.data[i].position, heap.data[i].bats, heap.data[i].throws});
+                    for (int i = 0; i < based.player_vect.size(); i++)
+                        playas.add_row({based.player_vect[i].first_name, based.player_vect[i].last_name, based.player_vect[i].position, based.player_vect[i].bats, based.player_vect[i].throws});
                     cout << playas << endl;
+                    cout << heap.isEmpty() << endl;
                 }
-
-
-
             }
 
         }
