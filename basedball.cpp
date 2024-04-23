@@ -174,7 +174,7 @@ const unordered_set<string> Basedball::other = {"BL2", "BR3", "BR4", "BS2", "CL3
                                           "WS6", "BFP", "BRP", "BSP", "CHP", "CLP", "NYP", "PHP",
                                           "PTP", "ALT", "BLU", "BSU", "CHU", "CNU", "KCU", "MLU",
                                           "PHU", "SLU", "SPU", "WIL", "WSU"};
-const unordered_set<string> Basedball::valid_stats = {"Bats", "Throws", "Team", "League", "AB", "R",
+const unordered_set<string> Basedball::valid_stats = {"Bats", "Throws", "Team", "League", "AB", "R", "BA",
                                                       "H", "2B", "3B", "HR", "RBI", "SB", "CS", "BB", "SO",
                                                       "IBB", "HBP", "SH", "SF", "GIDP_F", "POS", "G", "GS",
                                                       "InnOuts", "PO", "A", "E", "DP", "PB", "SB", "CS", "ZR",
