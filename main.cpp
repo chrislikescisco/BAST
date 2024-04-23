@@ -45,7 +45,6 @@ int main() {
     teams.insert(based.other.begin(), based.other.end());
     string sort = "last_name";
     unordered_set<string> leagues = {"AL", "NL", "other"};
-    unordered_multimap<string, string> players;
 
     while (run) {
         cout << "enter a command (type \"help\" for a list of commands):" << endl;
@@ -90,7 +89,7 @@ int main() {
                 comms.add_row({"league <LEAGUE>", "Show only players from LEAGUE (default: all)"});
                 comms.add_row({"stats <STAT_1> <STAT_2>", "Show only selected stats (default: all)"});
                 comms.add_row({"default", "Reset all parameters to defaults"});
-                comms.add_row({"player <FIRST_1> <LAST_1>", "Show only results for specified players"});
+                comms.add_row({"player <FIRST> <LAST>", "Show only results for specified player"});
                 comms.add_row({"view", "View current parameters"});
                 comms.add_row({"exit", "Exit BAST"});
                 comms.column(0).format().font_color(tabulate::Color::red);
@@ -141,12 +140,11 @@ int main() {
                 }
                 else if (regex_match(op2, player_in)) {
                     tabulate::Table info;
-                    info.add_row({"player", "Print data only for players specified in this command. Player names are\n "
+                    info.add_row({"player", "Print data only for the player specified in this command. Player names are\n "
                                             "case-sensitive and surrounded by double quotes. Multiple names should\n"
                                             "be separated by a comma. Do not include any characters with accents or diacritics\n"
                                             "in player names."});
                     info.add_row({"player Jose Abreu", "Display selected statistics for Jose Abreu"});
-                    info.add_row({"player Jose Abreu, Jake Burger", "Display selected statistics for Jose Abreu and Jake Burger"});
                     info.add_row({"player all", "Display selected statistics for all players"});
                     info.column(0).format().font_color(tabulate::Color::red);
                     info.column(0).format().font_style({tabulate::FontStyle::bold});
@@ -255,8 +253,18 @@ int main() {
             }
 
             if (op2 == "last_name") {
-                if (op3 == "asc")
-                Basedball::MaxHeap heap(Basedball::CompareLastName);
+                if (op3 == "asc") {
+                    Basedball::CompareLastName cmp;
+                    Basedball::MaxHeap heap(cmp);
+                    heap.heapSort(based.player_vect, cmp, leagues, teams, years);
+                    tabulate::Table playas;
+                    playas.add_row({"First Name", "Last Name", "Pos.", "Bats", "Throws"});
+                    for (int i = 0; i < heap.data.size(); i++)
+                        playas.add_row({heap.data[i].first_name, heap.data[i].last_name, heap.data[i].position, heap.data[i].bats, heap.data[i].throws});
+                    cout << playas << endl;
+                }
+
+
 
             }
 
