@@ -126,9 +126,10 @@ class Basedball { // I am thinking UpperCamelCase classes, lowerCamelCase funcs,
 
 public:
     int find(string player_id);
-    static unordered_set<string> AL;
-    static unordered_set<string> NL;
-    static unordered_set<string> other;
+    static const unordered_set<string> AL;
+    static const unordered_set<string> NL;
+    static const unordered_set<string> other;
+    static const unordered_set<string> valid_stats;
     static unordered_set<string> pitchers;
 //        int wins;
 //        int losses;
