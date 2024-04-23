@@ -254,15 +254,22 @@ int main() {
 
             if (op2 == "last_name") {
                 if (op3 == "asc") {
+                    cout << "Sorting database..." << endl;
                     Basedball::CompareLastName cmp;
                     Basedball::MaxHeap heap(cmp);
                     heap.heapSort(based.player_vect, cmp, leagues, teams, years);
                     tabulate::Table playas;
                     playas.add_row({"First Name", "Last Name", "Pos.", "Bats", "Throws"});
-                    for (int i = 0; i < based.player_vect.size(); i++)
-                        playas.add_row({based.player_vect[i].first_name, based.player_vect[i].last_name, based.player_vect[i].position, based.player_vect[i].bats, based.player_vect[i].throws});
+                    unordered_set<string> included;
+                    for (int i = 0; i < based.player_vect.size(); i++) {
+                        if (!included.contains(based.player_vect[i].player_id)) {
+                            playas.add_row({based.player_vect[i].first_name, based.player_vect[i].last_name,
+                                            based.player_vect[i].position, based.player_vect[i].bats,
+                                            based.player_vect[i].throws});
+                            included.insert(based.player_vect[i].player_id);
+                        }
+                    }
                     cout << playas << endl;
-                    cout << heap.isEmpty() << endl;
                 }
             }
 
