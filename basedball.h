@@ -142,7 +142,9 @@ public:
     // map which contains combined career stats, as well as a year 1 which contains career averages.)
     class ComparePlayers {
     public:
+        ComparePlayers() = default;
         virtual bool operator()(const Player &a, const int &yr1, const Player &b, const int& yr2) const = 0;
+        virtual ~ComparePlayers(){};
     };
     class CompareByBattingAvg : public ComparePlayers {
     public:

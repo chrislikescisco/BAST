@@ -270,6 +270,7 @@ int main() {
             string op2, op3;
             getline(iline, op2, ' ');
             getline(iline, op3);
+            Basedball::ComparePlayers* cmp;
             if (op3 != "asc" && op3 != "desc") {
                 invalid();
                 break;
@@ -277,29 +278,286 @@ int main() {
 
             if (op2 == "last_name") {
                 if (op3 == "asc")
-                    Basedball::CompareLastName cmp;
+                    cmp = new Basedball::CompareLastName;
 
-                if (op3 == "desc")
-                    Basedball::CompareLastNameDesc cmp;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareLastNameDesc;
 
             }
 
-            if (op2 = "BA") {
-                if (op3 == )
+            else if (op2 == "BA") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareByBattingAvg;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareByBattingAvgDesc;
+            }
+
+            else if (op2 == "HR") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareByHomeRuns;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareByHomeRunsDesc;
+            }
+
+            else if (op2 == "RBI") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareByRBI;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareByRBIDesc;
+            }
+
+            else if (op2 == "AB") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareByAtBats;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareByAtBatsDesc;
+            }
+
+            else if (op2 == "R") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareRuns;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareRunsDesc;
+            }
+
+            else if (op2 == "H") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareHits;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareHitsDesc;
+            }
+
+            else if (op2 == "2B") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareDoubles;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareDoublesDesc;
+            }
+
+            else if (op2 == "3B") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareTriples;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareTriplesDesc;
+            }
+
+            else if (op2 == "SB") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareStolenBases;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareStolenBasesDesc;
+            }
+
+            else if (op2 == "CS") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareStealing;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareStealingDesc;
+            }
+
+            else if (op2 == "SO") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareStrikes;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareStrikesDesc;
+            }
+
+            else if (op2 == "BB") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareWalks;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareWalksDesc;
+            }
+
+            else if (op2 == "HBP") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareHitPitch;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareHitPitchDesc;
+            }
+
+            else if (op2 == "SH") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareSacs;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareSacsDesc;
+            }
+
+            else if (op2 == "SF") {
+                if (op3 == "asc")
+                    cmp = new Basedball::CompareSacFlies;
+                else if (op3 == "desc")
+                    cmp = new Basedball::CompareSacFliesDesc;
+            }
+
+            else {
+                Basedball::CompareSacs cmp;
+                invalid();
+                break;
             }
             cout << "Sorting database..." << endl;
-            Basedball::MaxHeap heap(cmp);
-            heap.heapSort(based.player_vect, cmp, leagues, teams, years);
+            Basedball::MaxHeap heap(*cmp);
+            heap.heapSort(based.player_vect, *cmp, leagues, teams, years);
             tabulate::Table playas;
-            playas.add_row({"First Name", "Last Name", "Pos.", "Bats", "Throws"}); //
+            tabulate::RowStream r{};
+            r << "First Name" << "Last Name" << "Year";
+            if (stats.contains("Bats"))
+                r << "Bats";
+            if (stats.contains("Throws"))
+                r << "Throws";
+            if (stats.contains("Year"))
+                r << "Year";
+            if (stats.contains("Team"))
+                r << "Team";
+            if (stats.contains("League"))
+                r << "League";
+            if (stats.contains("POS"))
+                r << "POS";
+            if (stats.contains("AB"))
+                r << "AB";
+            if (stats.contains("R"))
+                r << "R";
+            if (stats.contains("H"))
+                r << "H";
+            if (stats.contains("2B"))
+                r << "2B";
+            if (stats.contains("3B"))
+                r << "3B";
+            if (stats.contains("HR"))
+                r << "HR";
+            if (stats.contains("RBI"))
+                r << "RBI";
+            if (stats.contains("SB"))
+                r << "SB";
+            if (stats.contains("CS"))
+                r << "CS";
+            if (stats.contains("BB"))
+                r << "BB";
+            if (stats.contains("SO"))
+                r << "SO";
+            if (stats.contains("IBB"))
+                r << "IBB";
+            if (stats.contains("HBP"))
+                r << "HBP";
+            if (stats.contains("SH"))
+                r << "SH";
+            if (stats.contains("SF"))
+                r << "SF";
+            if (stats.contains("GIDP_F"))
+                r << "GIDP_F";
+            if (stats.contains("G"))
+                r << "G";
+            if (stats.contains("GS"))
+                r << "GS";
+            if (stats.contains("InnOuts"))
+                r << "InnOuts";
+            if (stats.contains("PO"))
+                r << "PO";
+            if (stats.contains("A"))
+                r << "A";
+            if (stats.contains("E"))
+                r << "E";
+            if (stats.contains("DP"))
+                r << "DP";
+            if (stats.contains("PB"))
+                r << "PB";
+            if (stats.contains("SB"))
+                r << "SB";
+            if (stats.contains("CS"))
+                r << "CS";
+            if (stats.contains("ZR"))
+                r << "ZR";
+            if (stats.contains("W"))
+                r << "W";
+            if (stats.contains("L"))
+                r << "L";
+            if (stats.contains("CG"))
+                r << "CG";
+            if (stats.contains("SHO"))
+                r << "SHO";
+            if (stats.contains("SV"))
+                r << "SV";
+            if (stats.contains("IPouts"))
+                r << "IPouts";
+            if (stats.contains("H_P"))
+                r << "H_P";
+            if (stats.contains("ER"))
+                r << "ER";
+            if (stats.contains("HR_P"))
+                r << "HR_P";
+            if (stats.contains("BB_P"))
+                r << "BB_P";
+            if (stats.contains("SO_P"))
+                r << "SO_P";
+            if (stats.contains("BAOpp"))
+                r << "BAOpp";
+            if (stats.contains("ERA"))
+                r << "ERA";
+            if (stats.contains("IBB_P"))
+                r << "IBB_P";
+            if (stats.contains("WP"))
+                r << "WP";
+            if (stats.contains("HBP_P"))
+                r << "HBP_P";
+            if (stats.contains("BK"))
+                r << "BK";
+            if (stats.contains("BFP"))
+                r << "BFP";
+            if (stats.contains("GF"))
+                r << "GF";
+            if (stats.contains("R"))
+                r << "R";
+            if (stats.contains("SH_P"))
+                r << "SH_P";
+            if (stats.contains("SF_P"))
+                r << "SF_P";
+            playas.add_row(r); //
             unordered_set<string> included;
             for (int i = 0; i < based.player_vect.size(); i++) {
-                if (!included.contains(based.player_vect[i].player_id)) {
-                    playas.add_row({based.player_vect[i].first_name, based.player_vect[i].last_name,
-                                    based.player_vect[i].position, based.player_vect[i].bats,
-                                    based.player_vect[i].throws});
-                    included.insert(based.player_vect[i].player_id);
-                }
+                tabulate::RowStream r2{};
+                r2 << player_vect[i].
+                if (stats.contains("Bats"))
+                    r2 << player_vect[i].bats;
+                if (stats.contains("Throws"))
+                    r2 << player_vect[i].throws;
+                if (stats.contains("POS"))
+                    r2 << player_vect;
+                if (stats.contains("Team"))
+                    r2 << "Team";
+                if (stats.contains("League"))
+                    r2 << "League";
+                if (stats.contains("AB"))
+                    r2 << "AB";
+                if (stats.contains("R"))
+                    r2 << "R";
+                if (stats.contains("H"))
+                    r2 << "H";
+                if (stats.contains("2B"))
+                    r2 << "2B";
+                if (stats.contains("3B"))
+                    r2 << "3B";
+                if (stats.contains("HR"))
+                    r2 << "HR";
+                if (stats.contains("RBI"))
+                    r2 << "RBI";
+                if (stats.contains("SB"))
+                    r2 << "SB";
+                if (stats.contains("CS"))
+                    r2 << "CS";
+                if (stats.contains("BB"))
+                    r2 << "BB";
+                if (stats.contains("SO"))
+                    r2 << "SO";
+                if (stats.contains("IBB"))
+                    r2 << "IBB";
+                if (stats.contains("HBP"))
+                    r2 << "HBP";
+                if (stats.contains("SH"))
+                    r2 << "SH";
+                if (stats.contains("SF"))
+                    r2 << "SF";
+                if (stats.contains("GIDP_F"))
+                    r2 << "GIDP_F";
             }
             cout << playas << endl;
 
