@@ -77,7 +77,6 @@ int main() {
         if (regex_match(op1, help_in)) {
             if (input.size() == 4) {
                 tabulate::Table comms;
-                comms.add_row({"print", "Print a list of players corresponding to selected filters"});
                 comms.add_row({"help", "Print a list of commands"});
                 comms.add_row({"help stats", "Print a list explaining each statistic"});
                 comms.add_row({"help BAST", "Print information about BAST"});
@@ -87,7 +86,7 @@ int main() {
                 comms.add_row({"year <TO> <FROM>", "Show stats between <TO> and <FROM> only (default: 1871-2023)"});
                 comms.add_row({"teams <TEAM_1> <TEAM_2> ...", "Show stats for only specified teams (default: all)"});
                 comms.add_row({"filters", "Show current value of each filter"});
-                comms.add_row({"sort <STAT>", "Sort the output by the specified statistic (default: last_name)"});
+                comms.add_row({"sort <STAT>", "Sort the output by the specified statistic (default: last_name), print statistics"});
                 comms.add_row({"league <LEAGUE>", "Show only players from LEAGUE (default: all)"});
                 comms.add_row({"stats <STAT_1> <STAT_2>", "Show only selected stats (default: all)"});
                 comms.add_row({"default", "Reset all parameters to defaults"});
@@ -129,15 +128,6 @@ int main() {
                     info.column(0).format().font_color(tabulate::Color::red);
                     info.column(0).format().font_style({tabulate::FontStyle::bold});
                     info.column(0).format().font_background_color(tabulate::Color::blue);
-                    cout << info << endl;
-                }
-                else if (regex_match(op2, print_in)) {
-                    tabulate::Table info;
-                    info.add_row({"print", "Print out player data with currently applied filters, takes no arguments"});
-                    info.column(0).format().font_color(tabulate::Color::red);
-                    info.column(0).format().font_style({tabulate::FontStyle::bold});
-                    info.column(0).format().font_background_color(tabulate::Color::blue);
-                    info.format().font_align(tabulate::FontAlign::center);
                     cout << info << endl;
                 }
                 else if (regex_match(op2, player_in)) {
@@ -248,8 +238,9 @@ int main() {
             unordered_set<string> new_stats;
             vector<string> args;
             string tmp;
-            while(getline(iline, tmp, ' '))
+            while(getline(iline, tmp, ' ')) {
                 args.push_back(tmp);
+            }
             bool ins = true;
             for (int i = 0; i < args.size(); i++) {
                 if (!based.valid_stats.contains(args[i])) {
